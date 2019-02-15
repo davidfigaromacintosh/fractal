@@ -1,2 +1,1 @@
-# fractal
-A program written in C++ that generates fractals
+# A simple C++ program that generates fractals with SDL 2.0
