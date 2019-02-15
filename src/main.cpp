@@ -128,7 +128,7 @@ double abs(z _z) {
 #define BORDER 2
 
 int main(int argc, char **argv) {
-
+	SetConsoleTitleA("(= OwO =)");
 	char tempstr[256];
 	
 	//Initiate SDL
@@ -150,7 +150,7 @@ int main(int argc, char **argv) {
 	//Creating the SDL window
 	//Tworzymy okno w SDL
 	std::cout << "Creating a window...";
-	if ((window = SDL_CreateWindow("(=OwO=)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN)) == NULL) {
+	if ((window = SDL_CreateWindow("(= OwO =)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN)) == NULL) {
 		std::cout << "Oops, couldn't create a window :(\n" << SDL_GetError() << std::endl;
 		exit(0xF19A20);
 	}
