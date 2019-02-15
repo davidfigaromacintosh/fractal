@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <malloc.h>
 #include <math.h>
-#include <SDL.h>
+#include "include/SDL.h"
 
 SDL_Window *window;
 SDL_Renderer *renderer;
