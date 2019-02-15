@@ -1,9 +1,8 @@
 #include <chrono>
 #include <iostream>
-#include <Windows.h>
 #include <malloc.h>
 #include <math.h>
-#include "include/SDL.h"
+#include <SDL/SDL.h>
 
 SDL_Window *window;
 SDL_Renderer *renderer;
@@ -128,7 +127,8 @@ double abs(z _z) {
 #define BORDER 2
 
 int main(int argc, char **argv) {
-	SetConsoleTitleA("(= OwO =)");
+
+	std::cout << "\033]0;(= OwO =)\007";
 	char tempstr[256];
 	
 	//Initiate SDL
