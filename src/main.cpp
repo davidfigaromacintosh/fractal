@@ -228,7 +228,7 @@ int main(int argc, char **argv) {
 			break;
 		}
 	}
-	sprintf_s(tempstr, sizeof(tempstr), "%s:   X: %.16g   Y: %.16g   R: %.16g   Iterations: %ld", tempstr, X, Y, R, it);
+	sprintf_s(tempstr, sizeof(tempstr), "%s:   X: %.16g   Y: %.16g   R: %.16g   Iterations: %llu", tempstr, X, Y, R, it);
 	SDL_SetWindowTitle(window, tempstr);
 
 	//Shows the window
