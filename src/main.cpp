@@ -3,8 +3,7 @@
 #include <Windows.h>
 #include <malloc.h>
 #include <math.h>
-#include "include/SDL.h"
-#include "include/SDL_ttf.h"
+#include <SDL.h>
 
 SDL_Window *window;
 SDL_Renderer *renderer;
@@ -18,7 +17,7 @@ SDL_Event event;
 //SDL_Color font_color = { 128, 0, 0 };
 
 class z {	//This class defines complex numbers
-			    //Ta klasa definiuje liczby zespolone
+			//Ta klasa definiuje liczby zespolone
 
 	double re, im;
 
@@ -69,7 +68,7 @@ public:
 	}
 	z operator* (const z _z) {
 		return z((this->re * _z.re - this->im * _z.im),	//(ac - bd)
-		(this->re * _z.im + this->im * _z.re));	//(ad + bc)i
+			(this->re * _z.im + this->im * _z.re));	//(ad + bc)i
 	}
 
 	//Division
@@ -79,7 +78,7 @@ public:
 	}
 	z operator/ (const z _z) {
 		return z((this->re * _z.re + this->im * _z.im) / (_z.re * _z.re + _z.im * _z.im),	//(ac + bd) / (c2 + d2)
-		(this->im * _z.re - this->re * _z.im) / (_z.re * _z.re + _z.im * _z.im));	//(bc - ad)i / (c2 + d2)
+			(this->im * _z.re - this->re * _z.im) / (_z.re * _z.re + _z.im * _z.im));	//(bc - ad)i / (c2 + d2)
 	}
 
 	//Print number Z using ostream
@@ -136,17 +135,17 @@ int main(int argc, char **argv) {
 	//Inicjacja SDL
 	std::cout << "Initializing SDL...";
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
-		std::cout << "Oops, couldn't init SDL :(\n" << TTF_GetError() << std::endl;
+		std::cout << "Oops, couldn't init SDL :(\n" << SDL_GetError() << std::endl;
 		exit(0xF19A20);
 	}
 	std::cout << " Done!\n";
 
-	std::cout << "Initializing TTF...";
-	if (TTF_Init() == -1) {
-		std::cout << "Oops, couldn't init TTF :(\n" << TTF_GetError() << std::endl;
-		exit(0xF19A20);
-	}
-	std::cout << " Done!\n";
+	//std::cout << "Initializing TTF...";
+	//if (TTF_Init() == -1) {
+	//	std::cout << "Oops, couldn't init TTF :(\n" << TTF_GetError() << std::endl;
+	//	exit(0xF19A20);
+	//}
+	//std::cout << " Done!\n";
 
 	//Creating the SDL window
 	//Tworzymy okno w SDL
@@ -238,11 +237,11 @@ int main(int argc, char **argv) {
 
 	std::cout <<
 		"\nRenderer information:"	<< std::endl <<
-		"F = " << type				    << std::endl <<
-		"X = " << X					      << std::endl <<
-		"Y = " << Y					      << std::endl <<
-		"R = " << R					      << std::endl <<
-		"I = " << it				      << std::endl <<
+		"F = " << type				<< std::endl <<
+		"X = " << X					<< std::endl <<
+		"Y = " << Y					<< std::endl <<
+		"R = " << R					<< std::endl <<
+		"I = " << it				<< std::endl <<
 	std::endl;
 
 	//if ((font = TTF_OpenFont("ariblk.ttf", 18)) == NULL) {
@@ -267,8 +266,10 @@ int main(int argc, char **argv) {
 			
 			Z = z(0, 0);
 			C = z(
+
 				R * ( -BORDER + ((double)i / WIDTH ) * BORDER*2 ) + X,
 				R * ( -BORDER + ((double)j / HEIGHT) * BORDER*2 ) - Y
+
 			);
 
 			//std::cout << "C = " << C;
@@ -276,22 +277,22 @@ int main(int argc, char **argv) {
 			for (int k = 0; k <= it; k++) {
 				
 				switch (type) {
-					case 1: { //The Mandelbrot Set 3 formula: Z -> Z3 + C
+					case 1: {	//The Mandelbrot Set 3 formula: Z -> Z3 + C
 						Z = Z * Z * Z;
 						Z = Z + C;
 						break;
 					}
-					case 2: { //The Mandelbrot Set 4 formula: Z -> Z4 + C
+					case 2: {	//The Mandelbrot Set 4 formula: Z -> Z4 + C
 						Z = Z * Z * Z * Z;
 						Z = Z + C;
 						break;
 					}
-					case 3: { //The Burning ship formula: Z -> ( Re(Z) + Im(Z)i )2 + C
+					case 3: {	//The Burning ship formula: Z -> ( Re(Z) + Im(Z)i )2 + C
 						Z = z(abs(Z.r()), abs(Z.i())) * z(abs(Z.r()), abs(Z.i()));
 						Z = Z + C;
 						break;
 					}
-					default: { //The Mandelbrot Set 2 formula: Z -> Z2 + C
+					default: {	//The Mandelbrot Set 2 formula: Z -> Z2 + C
 						Z = Z * Z;
 						Z = Z + C;
 						break;
