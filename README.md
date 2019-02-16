@@ -1,4 +1,4 @@
-# A simple C++ program that draws fractals!
+# A simple C++ program that draws fractals
 
 The program can render the following predefined sets:
 * Julia Sets Z^2
