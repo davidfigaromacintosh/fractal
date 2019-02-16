@@ -45,7 +45,9 @@ The program can render following fractal sets:
 * g++-multilib
 #### You can install these with the following commands:
 `sudo apt install libsdl2-2.0`
+
 `sudo apt install libsdl2-dev`
+
 `sudo apt install g++-multilib`
 
 #### 2. Open the terminal and type in the following command:
