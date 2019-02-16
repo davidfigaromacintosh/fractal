@@ -1,12 +1,13 @@
 # A simple C++ program that draws fractals!
 
 The program can render following fractal sets:
+* Julia Sets Z^2
+* Julia Sets Z^3
 * The Mandelbrot Set Z^2
 * The Mandelbrot Set Z^3
 * The Mandelbrot Set Z^4
+* The Lambda Mandelbrot
 * The Burning Ship
-
-More sets soon...
 
 #
 ## How to compile (Windows/Code::Blocks):
