@@ -135,10 +135,16 @@ double abs(z _z) {
 
 /*===========================================================================================*/
 
-#define WIDTH 640
-#define HEIGHT 640
+#define WIDTH 860
+#define HEIGHT WIDTH
 
-#define BORDER 2
+#define JULIA2 0
+#define JULIA3 1
+#define MANDELBROT2 2
+#define MANDELBROT3 3
+#define MANDELBROT4 4
+#define LAMBDAMANDELBROT 5
+#define BURNINGSHIP 6
 
 int main(int argc, char **argv) {
 
@@ -170,7 +176,7 @@ int main(int argc, char **argv) {
 	//Creating the SDL window
 	//Tworzymy okno w SDL
 	std::cout << "Creating a window...";
-	if ((window = SDL_CreateWindow("(= OwO =)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN)) == NULL) {
+	if ((window = SDL_CreateWindow("(= OwO =)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_OPENGL | SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_HIDDEN)) == NULL) {
 		std::cout << "Oops, couldn't create a window :(\n" << SDL_GetError() << std::endl;
 		exit(0xF19A20);
 	}
@@ -187,7 +193,7 @@ int main(int argc, char **argv) {
 
 	//Coordinations
 	//Współrzędne
-	double X = 0, Y = 0, R = 1;
+	double juliaX = 0, juliaY = 0, X = 0, Y = 0, R = 1;
 
 	//Complex
 	//Zespolone
@@ -199,7 +205,7 @@ int main(int argc, char **argv) {
 
 	//What fractal?
 	//Jaki fraktal?
-	unsigned short int type = 0;
+	unsigned short int type = 0, bailout = 2;
 
 _START:
 
@@ -211,20 +217,32 @@ _START:
 
 	std::cout << std::flush;
 
-	std::cout << "Select a fractal\n0 = Mandelbrot 2\n1 = Mandelbrot 3\n2 = Mandelbrot 4\n3 = Burning Ship\n>>> ";
+	std::cout << "Select a fractal\n0 = Julia Z^2\n1 = Julia Z^3\n2 = Mandelbrot Z^2\n3 = Mandelbrot Z^3\n4 = Mandelbrot Z^4\n5 = Lambda Mandelbrot\n6 = Burning Ship\n>>> ";
 	std::cin >> type;
 
-	std::cout << "\nEnter the X coordinate (double, from -2 to +2)\n>>> ";
+	if (type == JULIA2 || type == JULIA3) {
+		std::cout << "\nEnter the Julia X parameter (double, from -2 to +2)\n>>> ";
+		std::cin >> juliaX;
+		if (juliaX < -2) { juliaX = -2; }
+		if (juliaX > 2) { juliaX = 2; }
+
+		std::cout << "\nEnter the Julia Y parameter (double, from -2 to +2)\n>>> ";
+		std::cin >> juliaY;
+		if (juliaY < -2) { juliaY = -2; }
+		if (juliaY > 2) { juliaY = 2; }
+	}
+
+	std::cout << "\nEnter the X offset (double, from -2 to +2)\n>>> ";
 	std::cin >> X;
 	if (X < -2) { X = -2; }
 	if (X > 2) { X = 2; }
 
-	std::cout << "\nEnter the Y coordinate (double, from -2 to +2)\n>>> ";
+	std::cout << "\nEnter the Y offset (double, from -2 to +2)\n>>> ";
 	std::cin >> Y;
 	if (Y < -2) { Y = -2; }
 	if (Y > 2) { Y = 2; }
 
-	std::cout << "\nEnter the zoom ratio (double, must be greater than DBL_MIN and smaller than 2)\n>>> ";
+	std::cout << "\nEnter the zoom ratio (double, must be not smaller than DBL_MIN and not greater than 2)\n>>> ";
 	std::cin >> R;
 	if (R < DBL_MIN) { R = DBL_MIN; }
 	if (R > 2) { R = 2; }
@@ -236,22 +254,35 @@ _START:
 	//Sets the title of the window
 	//Ustawia tytuł okna
 	switch (type) {
-	case 1: {
-		strcpy(tempstr, "Mandelbrot 3");
-		break;
-	}
-	case 2: {
-		strcpy(tempstr, "Mandelbrot 4");
-		break;
-	}
-	case 3: {
-		strcpy(tempstr, "The Burning Ship");
-		break;
-	}
-	default: {
-		strcpy(tempstr, "Mandelbrot 2");
-		break;
-	}
+		case JULIA2: {
+			strcpy(tempstr, "Julia Z^2");
+			break;
+		}
+		case JULIA3: {
+			strcpy(tempstr, "Julia Z^3");
+			break;
+		}
+		case MANDELBROT2: {
+			strcpy(tempstr, "Mandelbrot Z^2");
+			break;
+		}
+		case MANDELBROT3: {
+			strcpy(tempstr, "Mandelbrot Z^3");
+			break;
+		}
+		case MANDELBROT4: {
+			strcpy(tempstr, "Mandelbrot Z^4");
+			break;
+		}
+		case LAMBDAMANDELBROT: {
+			strcpy(tempstr, "Lambda Mandelbrot");
+			break;
+		}
+		case BURNINGSHIP: {
+			strcpy(tempstr, "The Burning Ship");
+			break;
+		}
+
 	}
 	sprintf(tempstr, "%s:   X: %.16g   Y: %.16g   R: %.16g   Iterations: %llu", tempstr, X, Y, R, it);
 	SDL_SetWindowTitle(window, tempstr);
@@ -260,6 +291,7 @@ _START:
 	//Pokazuje okno
 	SDL_ShowWindow(window);
 
+	/*
 	std::cout <<
 		"\nRenderer information:" << std::endl <<
 		"F = " << type << std::endl <<
@@ -268,6 +300,7 @@ _START:
 		"R = " << R << std::endl <<
 		"I = " << it << std::endl <<
 		std::endl;
+	*/
 
 	//if ((font = TTF_OpenFont("ariblk.ttf", 18)) == NULL) {
 	//	std::cout << "Oops, couldn't load a font :(\n" << TTF_GetError() << std::endl;
@@ -283,46 +316,48 @@ _START:
 
 	auto start = std::chrono::steady_clock::now();
 
-	std::cout << "Rendering..." << std::endl;
+	std::cout << "\nRendering..." << std::endl;
 
 	for (int j = 0; j < HEIGHT; j++) {	//Y coord
 
 		for (int i = 0; i < WIDTH; i++) {	//X coord
 
-			Z = z(0, 0);
-			C = z(
+			switch (type) {
+				case JULIA2: 
+				case JULIA3: {
+					Z = z(
+						R * (-bailout + ((double)i / WIDTH) * bailout * 2) + X,
+						R * (-bailout + ((double)j / HEIGHT) * bailout * 2) - Y
+					);
+					C = z(juliaX, juliaY);
+					break;
+				}
+				case MANDELBROT2:
+				case MANDELBROT3: 
+				case MANDELBROT4: 
+				case BURNINGSHIP: {
+					Z = z(0, 0);
+					C = z(
+						R * (-bailout + ((double)i / WIDTH) * bailout * 2) + X,
+						R * (-bailout + ((double)j / HEIGHT) * bailout * 2) - Y
+					);
+					break;
+				}
+				case LAMBDAMANDELBROT: {
+					Z = z(0.25, 0);
+					C = z(
+						R * (-bailout + ((double)i / WIDTH) * bailout * 2) + X,
+						R * (-bailout + ((double)j / HEIGHT) * bailout * 2) - Y
+					);
+					break;
+				}
+			}
+			
 
-				R * (-BORDER + ((double)i / WIDTH) * BORDER * 2) + X,
-				R * (-BORDER + ((double)j / HEIGHT) * BORDER * 2) - Y
-
-			);
 
 			//std::cout << "C = " << C;
 
 			for (int k = 0; k <= it; k++) {
-
-				switch (type) {
-				case 1: {	//The Mandelbrot Set 3 formula: Z -> Z3 + C
-					Z = Z * Z * Z;
-					Z = Z + C;
-					break;
-				}
-				case 2: {	//The Mandelbrot Set 4 formula: Z -> Z4 + C
-					Z = Z * Z * Z * Z;
-					Z = Z + C;
-					break;
-				}
-				case 3: {	//The Burning ship formula: Z -> ( Re(Z) + Im(Z)i )2 + C
-					Z = z(abs(Z.r()), abs(Z.i())) * z(abs(Z.r()), abs(Z.i()));
-					Z = Z + C;
-					break;
-				}
-				default: {	//The Mandelbrot Set 2 formula: Z -> Z2 + C
-					Z = Z * Z;
-					Z = Z + C;
-					break;
-				}
-				}
 
 				//If Z crosses the border, stop calculating
 				//Jeżeli Z przekroczy granicę, nie licz dalej
@@ -347,6 +382,35 @@ _START:
 					break;
 				}
 
+				switch (type) {
+					case JULIA2:
+					case MANDELBROT2: {
+						Z = Z * Z;
+						Z = Z + C;
+						break;
+					}
+					case JULIA3:
+					case MANDELBROT3: {
+						Z = Z * Z * Z;
+						Z = Z + C;
+						break;
+					}
+					case MANDELBROT4: {
+						Z = Z * Z * Z * Z;
+						Z = Z + C;
+						break;
+					}
+					case LAMBDAMANDELBROT: {
+						Z = C * Z;
+						Z = Z * z(-Z.r() + 1, -Z.i());
+						break;
+					}
+					case BURNINGSHIP: {
+						Z = z(abs(Z.r()), abs(Z.i())) * z(abs(Z.r()), abs(Z.i()));
+						Z = Z + C;
+						break;
+					}
+				}
 			}
 
 		}
