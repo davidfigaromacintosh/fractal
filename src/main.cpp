@@ -1,8 +1,13 @@
-#include <chrono>
 #include <iostream>
-#include <malloc.h>
+#include <chrono>
+#include <cstring>
 #include <math.h>
+#include <float.h>
 #include <SDL2/SDL.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 SDL_Window *window;
 SDL_Renderer *renderer;
@@ -86,8 +91,8 @@ public:
 		char str_re[256] = { 0 };
 		char str_im[256] = { 0 };
 
-		sprintf_s(str_re, sizeof(str_re), "%.15g", _z.re);
-		sprintf_s(str_im, sizeof(str_im), "%.15g", _z.im);
+		sprintf(str_re, "%.15g", _z.re);
+		sprintf(str_im, "%.15g", _z.im);
 
 		os << str_re;
 		if (!(_z.re < 0)) os << '+';
@@ -128,9 +133,15 @@ double abs(z _z) {
 
 int main(int argc, char **argv) {
 
+    #ifdef __linux__
 	std::cout << "\033]0;(= OwO =)\007";
+	#elif _WIN32
+    SetConsoleTitleA("(= OwO =)");
+	#endif
+
+
 	char tempstr[256];
-	
+
 	//Initiate SDL
 	//Inicjacja SDL
 	std::cout << "Initializing SDL...";
@@ -183,10 +194,9 @@ int main(int argc, char **argv) {
 
 	_START:
 
-	system("clear");
 	system("cls");
 	std::cout << std::flush;
-	
+
 	std::cout << "Choose a fractal!\n0 = Mandelbrot 2\n1 = Mandelbrot 3\n2 = Mandelbrot 4\n3 = Burning Ship\n>>> ";
 	std::cin >> type;
 
@@ -213,23 +223,23 @@ int main(int argc, char **argv) {
 	//Ustawia tytuł okna
 	switch (type) {
 		case 1: {
-			strcpy_s(tempstr, sizeof(tempstr), "Mandelbrot 3");
+			strcpy(tempstr, "Mandelbrot 3");
 			break;
 		}
 		case 2: {
-			strcpy_s(tempstr, sizeof(tempstr), "Mandelbrot 4");
+			strcpy(tempstr, "Mandelbrot 4");
 			break;
 		}
 		case 3: {
-			strcpy_s(tempstr, sizeof(tempstr), "The Burning Ship");
+			strcpy(tempstr, "The Burning Ship");
 			break;
 		}
 		default: {
-			strcpy_s(tempstr, sizeof(tempstr), "Mandelbrot 2");
+			strcpy(tempstr, "Mandelbrot 2");
 			break;
 		}
 	}
-	sprintf_s(tempstr, sizeof(tempstr), "%s:   X: %.16g   Y: %.16g   R: %.16g   Iterations: %llu", tempstr, X, Y, R, it);
+	sprintf(tempstr, "%s:   X: %.16g   Y: %.16g   R: %.16g   Iterations: %llu", tempstr, X, Y, R, it);
 	SDL_SetWindowTitle(window, tempstr);
 
 	//Shows the window
@@ -264,7 +274,7 @@ int main(int argc, char **argv) {
 	for (int j = 0; j < HEIGHT; j++) {	//Y coord
 
 		for (int i = 0; i < WIDTH; i++) {	//X coord
-			
+
 			Z = z(0, 0);
 			C = z(
 
@@ -276,7 +286,7 @@ int main(int argc, char **argv) {
 			//std::cout << "C = " << C;
 
 			for (int k = 0; k <= it; k++) {
-				
+
 				switch (type) {
 					case 1: {	//The Mandelbrot Set 3 formula: Z -> Z3 + C
 						Z = Z * Z * Z;
@@ -324,7 +334,7 @@ int main(int argc, char **argv) {
 				}
 
 			}
-			
+
 		}
 	}
 
@@ -338,7 +348,7 @@ int main(int argc, char **argv) {
 	//SDL_FreeSurface(surf);
 	//SDL_DestroyTexture(tex);
 
-	printf_s("Done! Took %f seconds!\n", diff);
+	printf("Done! Took %f seconds!\n", diff);
 	std::cout << "Close the window to render another fractal or close the console to exit!";
 
 	while (1) {
@@ -354,7 +364,7 @@ int main(int argc, char **argv) {
 					SDL_HideWindow(window);
 					goto _START;
 				}
-		
+
 			}
 		}
 
