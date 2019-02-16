@@ -8,6 +8,7 @@ The program can render following fractal sets:
 
 More sets soon...
 
+#
 ## How to compile (Windows/Code::Blocks):
 #### 1. Download SDL 2.0 MinGW Development Libraries:
 <http://libsdl.org/download-2.0.php>
