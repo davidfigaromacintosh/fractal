@@ -64,6 +64,8 @@ More sets soon...
 ![alt text][img5]
 ![alt text][img6]
 
+(C) 2019 David Macintosh
+
 [img0]: https://github.com/dawid9554/fractal/blob/master/img/img0.png
 [img1]: https://github.com/dawid9554/fractal/blob/master/img/img1.png
 [img2]: https://github.com/dawid9554/fractal/blob/master/img/img2.png
