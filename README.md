@@ -31,7 +31,7 @@ The program can render the following predefined sets:
 #### 6. Now go to the "Linker settings" tab and in the "Other linker options" area type the following:
 `-lmingw32 -lSDL2main -lSDL2`
 
-#### 7. Go to the "Compiler settings" tab, go to the "Compiler flags" tab and make sure if the "Have g++ follow the C++11 ISO C++ language standard" is set.
+#### 7. Go to the "Compiler settings" tab, go to the "Compiler flags" tab and make sure the "Have g++ follow the C++11 ISO C++ language standard" flag is set.
 
 #### 8. Click "OK"
 
