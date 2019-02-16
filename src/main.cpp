@@ -22,6 +22,8 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 SDL_Event event;
 
+#define FPS 60
+
 //SDL_Surface *surf;
 //SDL_Texture *tex;
 //SDL_Rect rect;
@@ -187,7 +189,7 @@ int main(int argc, char **argv) {
 	//Creating the SDL window
 	//Tworzymy okno w SDL
 	std::cout << "Creating a renderer...";
-	if ((renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED)) == NULL) {
+	if ((renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)) == NULL) {
 		std::cout << "Oops, couldn't create a renderer :(\n" << SDL_GetError() << std::endl;
 		exit(0xF19A20);
 	}
@@ -256,42 +258,42 @@ _START:
 	//Sets the title of the window
 	//Ustawia tytuł okna
 	switch (type) {
-		case JULIA2: {
-			strcpy(tempstr, "Julia Z^2");
-			break;
-		}
-		case JULIA3: {
-			strcpy(tempstr, "Julia Z^3");
-			break;
-		}
-		case MANDELBROT2: {
-			strcpy(tempstr, "Mandelbrot Z^2");
-			break;
-		}
-		case MANDELBROT3: {
-			strcpy(tempstr, "Mandelbrot Z^3");
-			break;
-		}
-		case MANDELBROT4: {
-			strcpy(tempstr, "Mandelbrot Z^4");
-			break;
-		}
-		case INVMANDELBROT: {
-			strcpy(tempstr, "Inverse Mandelbrot");
-			break;
-		}
-		case LAMBDAMANDELBROT: {
-			strcpy(tempstr, "Lambda Mandelbrot");
-			break;
-		}
-		case TRICORN: {
-			strcpy(tempstr, "Tricorn");
-			break;
-		}
-		case BURNINGSHIP: {
-			strcpy(tempstr, "The Burning Ship");
-			break;
-		}
+	case JULIA2: {
+		strcpy(tempstr, "Julia Z^2");
+		break;
+	}
+	case JULIA3: {
+		strcpy(tempstr, "Julia Z^3");
+		break;
+	}
+	case MANDELBROT2: {
+		strcpy(tempstr, "Mandelbrot Z^2");
+		break;
+	}
+	case MANDELBROT3: {
+		strcpy(tempstr, "Mandelbrot Z^3");
+		break;
+	}
+	case MANDELBROT4: {
+		strcpy(tempstr, "Mandelbrot Z^4");
+		break;
+	}
+	case INVMANDELBROT: {
+		strcpy(tempstr, "Inverse Mandelbrot");
+		break;
+	}
+	case LAMBDAMANDELBROT: {
+		strcpy(tempstr, "Lambda Mandelbrot");
+		break;
+	}
+	case TRICORN: {
+		strcpy(tempstr, "Tricorn");
+		break;
+	}
+	case BURNINGSHIP: {
+		strcpy(tempstr, "The Burning Ship");
+		break;
+	}
 
 	}
 	sprintf(tempstr, "%s:   X: %.16g   Y: %.16g   R: %.16g   Iterations: %llu", tempstr, X, Y, R, it);
@@ -333,38 +335,38 @@ _START:
 		for (int i = 0; i < WIDTH; i++) {	//X coord
 
 			switch (type) {
-				case JULIA2: 
-				case JULIA3: {
-					Z = z(
-						R * (-bailout + ((double)i / WIDTH) * bailout * 2) + X,
-						R * (-bailout + ((double)j / HEIGHT) * bailout * 2) - Y
-					);
-					C = z(juliaX, juliaY);
-					break;
-				}
-				case MANDELBROT2:
-				case MANDELBROT3:
-				case MANDELBROT4:
-				case INVMANDELBROT:
-				case TRICORN:
-				case BURNINGSHIP: {
-					Z = z(0, 0);
-					C = z(
-						R * (-bailout + ((double)i / WIDTH) * bailout * 2) + X,
-						R * (-bailout + ((double)j / HEIGHT) * bailout * 2) - Y
-					);
-					break;
-				}
-				case LAMBDAMANDELBROT: {
-					Z = z(0.25, 0);
-					C = z(
-						R * (-bailout + ((double)i / WIDTH) * bailout * 2) + X,
-						R * (-bailout + ((double)j / HEIGHT) * bailout * 2) - Y
-					);
-					break;
-				}
+			case JULIA2:
+			case JULIA3: {
+				Z = z(
+					R * (-bailout + ((double)i / WIDTH) * bailout * 2) + X,
+					R * (-bailout + ((double)j / HEIGHT) * bailout * 2) - Y
+				);
+				C = z(juliaX, juliaY);
+				break;
 			}
-			
+			case MANDELBROT2:
+			case MANDELBROT3:
+			case MANDELBROT4:
+			case INVMANDELBROT:
+			case TRICORN:
+			case BURNINGSHIP: {
+				Z = z(0, 0);
+				C = z(
+					R * (-bailout + ((double)i / WIDTH) * bailout * 2) + X,
+					R * (-bailout + ((double)j / HEIGHT) * bailout * 2) - Y
+				);
+				break;
+			}
+			case LAMBDAMANDELBROT: {
+				Z = z(0.25, 0);
+				C = z(
+					R * (-bailout + ((double)i / WIDTH) * bailout * 2) + X,
+					R * (-bailout + ((double)j / HEIGHT) * bailout * 2) - Y
+				);
+				break;
+			}
+			}
+
 
 
 			//std::cout << "C = " << C;
@@ -395,43 +397,43 @@ _START:
 				}
 
 				switch (type) {
-					case JULIA2:
-					case MANDELBROT2: {
-						Z = Z * Z;
-						Z = Z + C;
-						break;
-					}
-					case JULIA3:
-					case MANDELBROT3: {
-						Z = Z * Z * Z;
-						Z = Z + C;
-						break;
-					}
-					case MANDELBROT4: {
-						Z = Z * Z * Z * Z;
-						Z = Z + C;
-						break;
-					}
-					case INVMANDELBROT: {
-						Z = Z * Z;
-						Z = Z + (z(1, 0)/C);
-						break;
-					}
-					case LAMBDAMANDELBROT: {
-						Z = C * Z;
-						Z = Z * z(-Z.r() + 1, -Z.i());
-						break;
-					}
-					case TRICORN: {
-						Z = Z * Z;
-						Z = conj(Z) + C;
-						break;
-					}
-					case BURNINGSHIP: {
-						Z = z(abs(Z.r()), abs(Z.i())) * z(abs(Z.r()), abs(Z.i()));
-						Z = Z + C;
-						break;
-					}
+				case JULIA2:
+				case MANDELBROT2: {
+					Z = Z * Z;
+					Z = Z + C;
+					break;
+				}
+				case JULIA3:
+				case MANDELBROT3: {
+					Z = Z * Z * Z;
+					Z = Z + C;
+					break;
+				}
+				case MANDELBROT4: {
+					Z = Z * Z * Z * Z;
+					Z = Z + C;
+					break;
+				}
+				case INVMANDELBROT: {
+					Z = Z * Z;
+					Z = Z + (z(1, 0) / C);
+					break;
+				}
+				case LAMBDAMANDELBROT: {
+					Z = C * Z;
+					Z = Z * z(-Z.r() + 1, -Z.i());
+					break;
+				}
+				case TRICORN: {
+					Z = Z * Z;
+					Z = conj(Z) + C;
+					break;
+				}
+				case BURNINGSHIP: {
+					Z = z(abs(Z.r()), abs(Z.i())) * z(abs(Z.r()), abs(Z.i()));
+					Z = Z + C;
+					break;
+				}
 				}
 			}
 
@@ -442,7 +444,6 @@ _START:
 	double diff = (double)(std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count()) / 1000000000;
 
 	//SDL_RenderCopy(renderer, tex, NULL, &rect);
-	SDL_RenderPresent(renderer);
 
 	//TTF_CloseFont(font);
 	//SDL_FreeSurface(surf);
@@ -467,7 +468,7 @@ _START:
 
 			}
 		}
-
+		SDL_RenderPresent(renderer);
 	}
 
 	return 0;
