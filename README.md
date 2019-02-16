@@ -1,6 +1,6 @@
 # A simple C++ program that draws fractals!
 
-The program can render following fractal sets:
+The program can render following predefined sets:
 * Julia Sets Z^2
 * Julia Sets Z^3
 * The Mandelbrot Set Z^2
