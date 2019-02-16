@@ -143,8 +143,10 @@ double abs(z _z) {
 #define MANDELBROT2 2
 #define MANDELBROT3 3
 #define MANDELBROT4 4
-#define LAMBDAMANDELBROT 5
-#define BURNINGSHIP 6
+#define INVMANDELBROT 5
+#define LAMBDAMANDELBROT 6
+#define TRICORN 7
+#define BURNINGSHIP 8
 
 int main(int argc, char **argv) {
 
@@ -217,7 +219,7 @@ _START:
 
 	std::cout << std::flush;
 
-	std::cout << "Select a fractal\n0 = Julia Z^2\n1 = Julia Z^3\n2 = Mandelbrot Z^2\n3 = Mandelbrot Z^3\n4 = Mandelbrot Z^4\n5 = Lambda Mandelbrot\n6 = Burning Ship\n>>> ";
+	std::cout << "Select a fractal\n0 = Julia Z^2\n1 = Julia Z^3\n2 = Mandelbrot Z^2\n3 = Mandelbrot Z^3\n4 = Mandelbrot Z^4\n5 = Inverse Mandelbrot\n6 = Lambda Mandelbrot\n7 = Tricorn\n8 = The Burning Ship\n>>> ";
 	std::cin >> type;
 
 	if (type == JULIA2 || type == JULIA3) {
@@ -274,8 +276,16 @@ _START:
 			strcpy(tempstr, "Mandelbrot Z^4");
 			break;
 		}
+		case INVMANDELBROT: {
+			strcpy(tempstr, "Inverse Mandelbrot");
+			break;
+		}
 		case LAMBDAMANDELBROT: {
 			strcpy(tempstr, "Lambda Mandelbrot");
+			break;
+		}
+		case TRICORN: {
+			strcpy(tempstr, "Tricorn");
 			break;
 		}
 		case BURNINGSHIP: {
@@ -333,8 +343,10 @@ _START:
 					break;
 				}
 				case MANDELBROT2:
-				case MANDELBROT3: 
-				case MANDELBROT4: 
+				case MANDELBROT3:
+				case MANDELBROT4:
+				case INVMANDELBROT:
+				case TRICORN:
 				case BURNINGSHIP: {
 					Z = z(0, 0);
 					C = z(
@@ -400,9 +412,19 @@ _START:
 						Z = Z + C;
 						break;
 					}
+					case INVMANDELBROT: {
+						Z = Z * Z;
+						Z = Z + (z(1, 0)/C);
+						break;
+					}
 					case LAMBDAMANDELBROT: {
 						Z = C * Z;
 						Z = Z * z(-Z.r() + 1, -Z.i());
+						break;
+					}
+					case TRICORN: {
+						Z = Z * Z;
+						Z = conj(Z) + C;
 						break;
 					}
 					case BURNINGSHIP: {
