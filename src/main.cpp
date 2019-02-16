@@ -2,7 +2,7 @@
 #include <iostream>
 #include <malloc.h>
 #include <math.h>
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 SDL_Window *window;
 SDL_Renderer *renderer;
@@ -183,6 +183,7 @@ int main(int argc, char **argv) {
 
 	_START:
 
+	system("clear");
 	system("cls");
 	std::cout << std::flush;
 	
