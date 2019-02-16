@@ -194,7 +194,12 @@ int main(int argc, char **argv) {
 
 	_START:
 
-	system("cls");
+    #ifdef __linux__
+	system("clear");
+	#elif _WIN32
+    system("cls");
+	#endif
+	
 	std::cout << std::flush;
 
 	std::cout << "Choose a fractal!\n0 = Mandelbrot 2\n1 = Mandelbrot 3\n2 = Mandelbrot 4\n3 = Burning Ship\n>>> ";
