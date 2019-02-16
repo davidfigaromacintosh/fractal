@@ -46,7 +46,7 @@ More sets soon...
 `sudo apt install libsdl2-dev`
 `sudo apt install g++-multilib`
 
-#### 2. Enter the terminal and type the following command:
+#### 2. Open the terminal and type in the following command:
 
 `g++ main.cpp -o fractal -lstdc++ -lm -lSDL2`
 
