@@ -24,14 +24,16 @@ More sets soon...
 #### 5. Go to the "Linker" tab and add a folder that contains archive libraries (.a files), e.g.:
 `C:\dev\i686-w64-mingw32\lib`
 
-#### 6. Now go to the "Linker settings" tab and in the "Other linker options" area, type the following:
+#### 6. Now go to the "Linker settings" tab and in the "Other linker options" area type the following:
 `-lmingw32 -lSDL2main -lSDL2`
 
-#### 7. Click "OK"
+#### 7. Go to the "Compiler settings" tab, go to the "Compiler flags" tab and make sure if the "Have g++ follow the C++11 ISO C++ language standard" is set.
 
-#### 7. Go to the "Build targets" tab and select the "Console application" type.
+#### 8. Click "OK"
 
-#### 8. Compile and run the program.
+#### 9. Go to the "Build targets" tab and select the "Console application" type.
+
+#### 10. Build and run the program.
 
 #
 ## How to compile (Linux):
