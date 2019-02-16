@@ -6,7 +6,9 @@ The program can render following fractal sets:
 * The Mandelbrot Set Z^2
 * The Mandelbrot Set Z^3
 * The Mandelbrot Set Z^4
-* The Lambda Mandelbrot
+* Inverse Mandelbrot
+* Lambda Mandelbrot
+* Tricorn
 * The Burning Ship
 
 #
