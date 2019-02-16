@@ -19,7 +19,7 @@ More sets soon...
 #### 3. Open Code::Blocks and create an empty project. Go to properties (Project -> Properties), select the "Project settings" tab and click the "Project's build options" button.
 
 #### 4. Go to the "Search directories" tab then to the "Compiler" tab. Click the "Add" button and select the include folder located in the folder with our libraries, e.g.:
-`C:\dev\i686-w64-mingw32\include\SDL2`
+`C:\dev\i686-w64-mingw32\include`
 
 #### 5. Go to the "Linker" tab and add a folder that contains archive libraries (.a files), e.g.:
 `C:\dev\i686-w64-mingw32\lib`
