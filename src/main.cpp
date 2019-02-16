@@ -22,6 +22,12 @@ SDL_Window *window;
 SDL_Renderer *renderer;
 SDL_Event event;
 
+struct Z_Color {
+	int r;
+	int g;
+	int b;
+};
+
 #define FPS 60
 
 //SDL_Surface *surf;
@@ -150,7 +156,17 @@ double abs(z _z) {
 #define TRICORN 7
 #define BURNINGSHIP 8
 
+static Z_Color matrix[WIDTH][HEIGHT];
+
 int main(int argc, char **argv) {
+
+	for (int j = 0; j < HEIGHT; j++) {
+		for (int i = 0; i < WIDTH; i++) {
+			matrix[i][j].r = 0;
+			matrix[i][j].g = 0;
+			matrix[i][j].b = 0;
+		}
+	}
 
 #ifdef __linux__
 	std::cout << "\033]0;(= OwO =)\007";
@@ -376,13 +392,16 @@ _START:
 				//If Z crosses the border, stop calculating
 				//Jeżeli Z przekroczy granicę, nie licz dalej
 				if (!(abs(Z) < 2)) {
-					SDL_SetRenderDrawColor(renderer,
-						128 * (0.5 + sin(0.5*(double)k / M_PI) / 2),
-						255 * (0.5 + sin(0.5*(double)k / M_PI) / 2),
-						255,
-						255
-					);
-					SDL_RenderDrawPoint(renderer, i, j);
+					//SDL_SetRenderDrawColor(renderer,
+					//	128 * (0.5 + sin(0.5*(double)k / M_PI) / 2),
+					//	255 * (0.5 + sin(0.5*(double)k / M_PI) / 2),
+					//	255,
+					//	255
+					//);
+					//SDL_RenderDrawPoint(renderer, i, j);
+					matrix[i][j].r = 128 * (0.5 + sin(0.5*(double)k / M_PI) / 2);
+					matrix[i][j].g = 255 * (0.5 + sin(0.5*(double)k / M_PI) / 2);
+					matrix[i][j].b = 255;
 					//std::cout << " Failed!" << std::endl;
 					break;
 				}
@@ -390,8 +409,11 @@ _START:
 				//If the point belongs to the set, colour it black
 				//Jeżeli punkt należy do zbioru, pokoloruj go na czarno
 				if (k == it) {
-					SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-					SDL_RenderDrawPoint(renderer, i, j);
+					//SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+					//SDL_RenderDrawPoint(renderer, i, j);
+					matrix[i][j].r = 0;
+					matrix[i][j].g = 0;
+					matrix[i][j].b = 0;
 					//std::cout << " Passed!" << std::endl;
 					break;
 				}
@@ -457,15 +479,24 @@ _START:
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 
-			case SDL_QUIT: {
-				//SDL_DestroyWindow(window);
-				//SDL_Quit();
-				//TTF_Quit();
-				//return 0;
-				SDL_HideWindow(window);
-				goto _START;
-			}
+				case SDL_QUIT: {
+					//SDL_DestroyWindow(window);
+					//SDL_Quit();
+					//TTF_Quit();
+					//return 0;
+					SDL_HideWindow(window);
+					goto _START;
+				}
 
+			}
+		}
+
+		SDL_RenderClear(renderer);
+
+		for (int j = 0; j < HEIGHT; j++) {
+			for (int i = 0; i < WIDTH; i++) {
+				SDL_SetRenderDrawColor(renderer, matrix[i][j].r, matrix[i][j].g, matrix[i][j].b, 255);
+				SDL_RenderDrawPoint(renderer, i, j);
 			}
 		}
 		SDL_RenderPresent(renderer);
