@@ -1,9 +1,18 @@
+#ifdef _MSC_VER
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <iostream>
 #include <chrono>
 #include <cstring>
 #include <math.h>
 #include <float.h>
+
+#ifdef _MSC_VER
+#include <SDL.h>
+#else
 #include <SDL2/SDL.h>
+#endif
 
 #ifdef _WIN32
 #include <windows.h>
@@ -133,11 +142,11 @@ double abs(z _z) {
 
 int main(int argc, char **argv) {
 
-    #ifdef __linux__
+#ifdef __linux__
 	std::cout << "\033]0;(= OwO =)\007";
-	#elif _WIN32
-    SetConsoleTitleA("(= OwO =)");
-	#endif
+#elif _WIN32
+	SetConsoleTitleA("(= OwO =)");
+#endif
 
 
 	char tempstr[256];
@@ -192,17 +201,17 @@ int main(int argc, char **argv) {
 	//Jaki fraktal?
 	unsigned short int type = 0;
 
-	_START:
+_START:
 
-    #ifdef __linux__
+#ifdef __linux__
 	system("clear");
-	#elif _WIN32
-    system("cls");
-	#endif
-	
+#elif _WIN32
+	system("cls");
+#endif
+
 	std::cout << std::flush;
 
-	std::cout << "Choose a fractal!\n0 = Mandelbrot 2\n1 = Mandelbrot 3\n2 = Mandelbrot 4\n3 = Burning Ship\n>>> ";
+	std::cout << "Select a fractal\n0 = Mandelbrot 2\n1 = Mandelbrot 3\n2 = Mandelbrot 4\n3 = Burning Ship\n>>> ";
 	std::cin >> type;
 
 	std::cout << "\nEnter the X coordinate (double, from -2 to +2)\n>>> ";
@@ -227,22 +236,22 @@ int main(int argc, char **argv) {
 	//Sets the title of the window
 	//Ustawia tytuł okna
 	switch (type) {
-		case 1: {
-			strcpy(tempstr, "Mandelbrot 3");
-			break;
-		}
-		case 2: {
-			strcpy(tempstr, "Mandelbrot 4");
-			break;
-		}
-		case 3: {
-			strcpy(tempstr, "The Burning Ship");
-			break;
-		}
-		default: {
-			strcpy(tempstr, "Mandelbrot 2");
-			break;
-		}
+	case 1: {
+		strcpy(tempstr, "Mandelbrot 3");
+		break;
+	}
+	case 2: {
+		strcpy(tempstr, "Mandelbrot 4");
+		break;
+	}
+	case 3: {
+		strcpy(tempstr, "The Burning Ship");
+		break;
+	}
+	default: {
+		strcpy(tempstr, "Mandelbrot 2");
+		break;
+	}
 	}
 	sprintf(tempstr, "%s:   X: %.16g   Y: %.16g   R: %.16g   Iterations: %llu", tempstr, X, Y, R, it);
 	SDL_SetWindowTitle(window, tempstr);
@@ -252,13 +261,13 @@ int main(int argc, char **argv) {
 	SDL_ShowWindow(window);
 
 	std::cout <<
-		"\nRenderer information:"	<< std::endl <<
-		"F = " << type				<< std::endl <<
-		"X = " << X					<< std::endl <<
-		"Y = " << Y					<< std::endl <<
-		"R = " << R					<< std::endl <<
-		"I = " << it				<< std::endl <<
-	std::endl;
+		"\nRenderer information:" << std::endl <<
+		"F = " << type << std::endl <<
+		"X = " << X << std::endl <<
+		"Y = " << Y << std::endl <<
+		"R = " << R << std::endl <<
+		"I = " << it << std::endl <<
+		std::endl;
 
 	//if ((font = TTF_OpenFont("ariblk.ttf", 18)) == NULL) {
 	//	std::cout << "Oops, couldn't load a font :(\n" << TTF_GetError() << std::endl;
@@ -283,8 +292,8 @@ int main(int argc, char **argv) {
 			Z = z(0, 0);
 			C = z(
 
-				R * ( -BORDER + ((double)i / WIDTH ) * BORDER*2 ) + X,
-				R * ( -BORDER + ((double)j / HEIGHT) * BORDER*2 ) - Y
+				R * (-BORDER + ((double)i / WIDTH) * BORDER * 2) + X,
+				R * (-BORDER + ((double)j / HEIGHT) * BORDER * 2) - Y
 
 			);
 
@@ -293,26 +302,26 @@ int main(int argc, char **argv) {
 			for (int k = 0; k <= it; k++) {
 
 				switch (type) {
-					case 1: {	//The Mandelbrot Set 3 formula: Z -> Z3 + C
-						Z = Z * Z * Z;
-						Z = Z + C;
-						break;
-					}
-					case 2: {	//The Mandelbrot Set 4 formula: Z -> Z4 + C
-						Z = Z * Z * Z * Z;
-						Z = Z + C;
-						break;
-					}
-					case 3: {	//The Burning ship formula: Z -> ( Re(Z) + Im(Z)i )2 + C
-						Z = z(abs(Z.r()), abs(Z.i())) * z(abs(Z.r()), abs(Z.i()));
-						Z = Z + C;
-						break;
-					}
-					default: {	//The Mandelbrot Set 2 formula: Z -> Z2 + C
-						Z = Z * Z;
-						Z = Z + C;
-						break;
-					}
+				case 1: {	//The Mandelbrot Set 3 formula: Z -> Z3 + C
+					Z = Z * Z * Z;
+					Z = Z + C;
+					break;
+				}
+				case 2: {	//The Mandelbrot Set 4 formula: Z -> Z4 + C
+					Z = Z * Z * Z * Z;
+					Z = Z + C;
+					break;
+				}
+				case 3: {	//The Burning ship formula: Z -> ( Re(Z) + Im(Z)i )2 + C
+					Z = z(abs(Z.r()), abs(Z.i())) * z(abs(Z.r()), abs(Z.i()));
+					Z = Z + C;
+					break;
+				}
+				default: {	//The Mandelbrot Set 2 formula: Z -> Z2 + C
+					Z = Z * Z;
+					Z = Z + C;
+					break;
+				}
 				}
 
 				//If Z crosses the border, stop calculating
@@ -361,14 +370,14 @@ int main(int argc, char **argv) {
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 
-				case SDL_QUIT: {
-					//SDL_DestroyWindow(window);
-					//SDL_Quit();
-					//TTF_Quit();
-					//return 0;
-					SDL_HideWindow(window);
-					goto _START;
-				}
+			case SDL_QUIT: {
+				//SDL_DestroyWindow(window);
+				//SDL_Quit();
+				//TTF_Quit();
+				//return 0;
+				SDL_HideWindow(window);
+				goto _START;
+			}
 
 			}
 		}
